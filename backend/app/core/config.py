@@ -11,7 +11,7 @@ class Settings:
         "DATABASE_URL",
         "postgresql+asyncpg://test:test@localhost:5432/test",
     )
-    jwt_secret: str = os.getenv("JWT_SECRET", "awefiwefijaiwfjwifiwef")
+    jwt_secret: str = os.getenv("JWT_SECRET", "your_jwt_secret")
     jwt_alg: str = os.getenv("JWT_ALG", "HS256")
     jwt_expires_min: int = int(os.getenv("JWT_EXPIRES_MIN", "120"))
     retention_days: int = int(os.getenv("RETENTION_DAYS", "1"))
