@@ -7,7 +7,7 @@ class TokenOut(BaseModel):
     - token_type: string, default=bearer
     '''
     access_token: str
-    token_type: str = "bearer"
+    token_type: str = "bearer"  # jwt에서 소유자 의미
 
 
 class LoginIn(BaseModel):
