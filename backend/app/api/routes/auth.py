@@ -38,8 +38,8 @@ async def register(payload: RegisterIn, db: AsyncSession = Depends(get_db)) -> T
     # user 테이블에 저장할 값 지정
     user = User(
         email=payload.email,  # 전달된/입력된 email
-        hash_password=hash_password(payload.password),  # hash 처리된 password
-        create_at=datetime.now(seoul_tz),  # kst
+        hashed_password=hash_password(payload.password),  # hash 처리된 password
+        created_at=datetime.now(seoul_tz),  # kst
     )
 
     db.add(user)  # user의 값을 세션에 추가, db에 저장 X
