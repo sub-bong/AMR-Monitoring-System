@@ -11,8 +11,7 @@ seoul_tz = pytz.timezone("Asia/Seoul")
 
 
 async def save_telemetry(
-        db: AsyncSession, map_pk: int, payload: TelemetryIn,
-) -> None:
+        db: AsyncSession, map_pk: int, payload: TelemetryIn):
     now = datetime.now(seoul_tz)
     ts = (
         datetime.fromtimestamp(
