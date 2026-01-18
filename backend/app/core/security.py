@@ -16,14 +16,14 @@ security.py 토큰 생성과 비밀번호 검증 기능
 '''
 
 
-def hash_password(password: str) -> str:
+def hash_password(password: str):
     '''
     ### password 해싱 기능(bcrypt)
     '''
     return pwd_context.hash(password)
 
 
-def verify_password(plain: str, hashed: str) -> bool:
+def verify_password(plain: str, hashed: str):
     '''
     ### password 해싱 검증
     prams: plain, hashed
@@ -34,8 +34,8 @@ def verify_password(plain: str, hashed: str) -> bool:
 def create_access_token(
         subject: str,
         subject_type: str,
-        expires_min: Optional[int] = None,
-) -> str:
+        expires_min: Optional[int] = None
+):
     '''
     ### 토큰 생성 기능
     ### 데이터 구조

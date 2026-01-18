@@ -20,7 +20,7 @@ auth.py 토큰 발급 기능
 
 
 @router.post("/register", response_model=TokenOut)
-async def register(payload: RegisterIn, db: AsyncSession = Depends(get_db)) -> TokenOut:
+async def register(payload: RegisterIn, db: AsyncSession = Depends(get_db)):
     '''
     회원가입 기능
 
@@ -52,7 +52,7 @@ async def register(payload: RegisterIn, db: AsyncSession = Depends(get_db)) -> T
 
 
 @router.post("/login", response_model=TokenOut)
-async def login(payload: LoginIn, db: AsyncSession = Depends(get_db)) -> TokenOut:
+async def login(payload: LoginIn, db: AsyncSession = Depends(get_db)):
     '''
     ### 로그인 기능
     '''
@@ -70,7 +70,7 @@ async def login(payload: LoginIn, db: AsyncSession = Depends(get_db)) -> TokenOu
 
 
 @router.post("/device", response_model=TokenOut)
-async def device_auth(payload: DeviceAuthIn, db: AsyncSession = Depends(get_db)) -> TokenOut:
+async def device_auth(payload: DeviceAuthIn, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(Device).where(Device.device_key == payload.device_key))
     device = result.scalar_one_or_none()
 

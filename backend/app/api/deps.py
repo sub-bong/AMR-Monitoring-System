@@ -1,5 +1,3 @@
-from typing import Tuple, AsyncGenerator
-
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError, jwt
@@ -17,12 +15,12 @@ deps.py user/device 토큰의 유효성 검사 기능
 '''
 
 
-async def get_db() -> AsyncGenerator[AsyncSession, None]:
+async def get_db():
     async with SessionLocal() as session:
         yield session
 
 
-def decode_token(token: str) -> Tuple[str, str]:
+def decode_token(token: str):
     '''
     :param token: 토큰 값을 받아 디코딩
     :type token: str
@@ -49,8 +47,8 @@ def decode_token(token: str) -> Tuple[str, str]:
 
 async def get_current_user(
     creds: HTTPAuthorizationCredentials = Depends(bearer),
-    db: AsyncSession = Depends(get_db),
-) -> User:
+    db: AsyncSession = Depends(get_db)
+):
     '''
     ### user 토큰의 유효성 검사
     '''
@@ -75,8 +73,8 @@ async def get_current_user(
 
 async def get_current_device(
     creds: HTTPAuthorizationCredentials = Depends(bearer),
-    db: AsyncSession = Depends(get_db),
-) -> Device:
+    db: AsyncSession = Depends(get_db)
+):
     '''
     ### device 토큰의 유효성 검사
     '''
