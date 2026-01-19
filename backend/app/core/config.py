@@ -22,5 +22,8 @@ class Settings:
     retention_days: int = int(
         os.getenv("RETENTION_DAYS", "1"))
 
+    device_token_secret: str = os.getenv(
+        "DEVICE_TOKEN_SECRET", "your_token_device")
+
 
 settings = Settings()

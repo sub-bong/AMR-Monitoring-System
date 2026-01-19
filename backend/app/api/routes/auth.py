@@ -6,7 +6,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_db
-from app.core.security import create_access_token, hash_password, verify_password
+from app.core.security import create_access_token, hash_password, verify_password, device_key_digest, verify_device_key
 from app.models import User, Device
 from app.schemas.auth import DeviceAuthIn, LoginIn, RegisterIn, TokenOut
 
@@ -71,11 +71,12 @@ async def login(payload: LoginIn, db: AsyncSession = Depends(get_db)):
 
 @router.post("/device", response_model=TokenOut)
 async def device_auth(payload: DeviceAuthIn, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Device).where(Device.device_key == payload.device_key))
+    digest = device_key_digest(payload.device_key)
+    result = await db.execute(select(Device).where(Device.device_key == digest))
     device = result.scalar_one_or_none()
 
     # 디바이스(amr) 로그인: 디바이스 키 존재하지 않으면 인증 실패
-    if not device:
+    if not device or not verify_device_key(payload.device_key, device.device_key_hash):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="invalid_device_key")
 
