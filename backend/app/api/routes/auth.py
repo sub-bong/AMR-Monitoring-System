@@ -72,7 +72,7 @@ async def login(payload: LoginIn, db: AsyncSession = Depends(get_db)):
 @router.post("/device", response_model=TokenOut)
 async def device_auth(payload: DeviceAuthIn, db: AsyncSession = Depends(get_db)):
     digest = device_key_digest(payload.device_key)
-    result = await db.execute(select(Device).where(Device.device_key == digest))
+    result = await db.execute(select(Device).where(Device.device_key_digest == digest))
     device = result.scalar_one_or_none()
 
     # 디바이스(amr) 로그인: 디바이스 키 존재하지 않으면 인증 실패
