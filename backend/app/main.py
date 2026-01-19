@@ -4,7 +4,7 @@ import asyncio
 
 from app.core.config import settings
 
-from app.api.routes import auth, telemetry, ws
+from app.api.routes import auth, telemetry, ws, maps, snapshots
 from app.services.retention_service import retention_loop
 
 
@@ -22,6 +22,8 @@ app = FastAPI(title=settings.app_name, lifespan=start_retention)
 app.include_router(auth.router)
 app.include_router(telemetry.router)
 app.include_router(ws.router)
+app.include_router(maps.router)
+app.include_router(snapshots.router)
 
 
 @app.get("/")
