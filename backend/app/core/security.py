@@ -4,6 +4,8 @@ from typing import Any, Optional
 
 from jose import jwt
 from passlib.context import CryptContext
+import hashlib
+import hmac
 
 from app.core.config import settings
 
@@ -26,6 +28,29 @@ def hash_password(password: str):
 def verify_password(plain: str, hashed: str):
     '''
     ### password 해싱 검증
+    prams: plain, hashed
+    '''
+    return pwd_context.verify(plain, hashed)
+
+
+def device_key_digest(device_key: str):
+    return hmac.new(
+        settings.device_token_secret.encode(),
+        device_key.encode(),
+        hashlib.sha256
+    ).hexdigest()
+
+
+def hash_device_key(device_key: str):
+    '''
+    ### device 해싱 기능
+    '''
+    return pwd_context.hash(device_key)
+
+
+def verify_device_key(plain: str, hashed: str):
+    '''
+    ### device_key 해싱 검증
     prams: plain, hashed
     '''
     return pwd_context.verify(plain, hashed)
