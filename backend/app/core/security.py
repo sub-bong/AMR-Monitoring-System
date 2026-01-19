@@ -79,7 +79,7 @@ def create_access_token(
     exp = now + timedelta(minutes=expires_min or settings.jwt_expires_min)
     payload: dict[str, Any] = {
         "sub": subject,
-        "type": subject_type,
+        "typ": subject_type,
         "iat": int(now.timestamp()),
         "exp": int(exp.timestamp()),
     }
