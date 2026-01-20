@@ -8,8 +8,8 @@ export default function MapCapturePage() {
   const [mapId, setMapId] = useState("map-001");
   const [deviceToken, setDeviceToken] = useState("");
 
-  const { mountRef, startSession, getCanvas } = useXrSession();
-  const { takeSnapshot } = useSnapshot(getCanvas);
+  const { mountRef, startSession, getCanvas, getXrMeta } = useXrSession();
+  const { takeSnapshot } = useSnapshot(getCanvas, getXrMeta);
 
   return (
     <div className="h-screen w-full">
