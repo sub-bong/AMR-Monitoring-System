@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import asyncio
 
@@ -18,6 +19,16 @@ async def start_retention(app: FastAPI):
         task.cancel()
 
 app = FastAPI(title=settings.app_name, lifespan=start_retention)
+
+# CORS Middleware 추가
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[origin.strip()
+                   for origin in settings.cors_origins.split(",")],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 app.include_router(auth.router)
 app.include_router(telemetry.router)

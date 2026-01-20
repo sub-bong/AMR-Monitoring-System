@@ -25,5 +25,7 @@ class Settings:
     device_token_secret: str = os.getenv(
         "DEVICE_TOKEN_SECRET", "your_token_device")
 
+    cors_origins: str = os.getenv("CORS_ORIGINS", "yor_cors_url")
+
 
 settings = Settings()
