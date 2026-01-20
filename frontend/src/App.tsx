@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import DashboardPage from "./pages/DashboardPage";
 import MapCapturePage from "./pages/MapCapturePage";
+import AuthPage from "./pages/AuthPage";
 
 export default function App() {
   return (
@@ -15,12 +16,16 @@ export default function App() {
             <Link to="/capture" className="text-slate-700 hover:text-slate-900">
               Capture
             </Link>
+            <Link to="/auth" className="text-slate-700 hover:text-slate-900">
+              Auth
+            </Link>
           </div>
         </nav>
 
         <Routes>
           <Route path="/" element={<DashboardPage />} />
           <Route path="/capture" element={<MapCapturePage />} />
+          <Route path="/auth" element={<AuthPage />} />
           <Route path="*" element={<div className="p-8">Not Found</div>} />
         </Routes>
       </div>

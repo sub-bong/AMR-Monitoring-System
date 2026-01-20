@@ -2,18 +2,20 @@ import { useEffect, useState } from "react";
 import { MapCanvas } from "../components/MapCanvas";
 import { apiGet } from "../services/api";
 import { useTelemetry } from "../hooks/telemetry/useTelemetry";
+import { useAuth } from "../hooks/auth/useAuth";
+import { Link } from "react-router-dom";
 
 type Point = { x: number; y: number };
 
 export default function DashboardPage() {
-  const [userToken, setUserToken] = useState("");
+  const { userToken, deviceToken } = useAuth();
   const [mapId, setMapId] = useState("map-001");
   const [polygon, setPolygon] = useState<Point[]>([]);
-  const [deviceToken, setDeviceToken] = useState("");
 
   const telemetry = useTelemetry(mapId, deviceToken);
 
   async function loadMap() {
+    if (!userToken) return;
     const res = await apiGet<{ ok: boolean; map: { polygon: Point[] } }>(`/maps/${mapId}`, userToken);
     setPolygon(res.map.polygon);
   }
@@ -39,35 +41,30 @@ export default function DashboardPage() {
           <h1 className="text-2xl font-semibold tracking-tight">AMR Monitoring</h1>
           <p className="text-sm text-slate-500">실시간 Map</p>
         </header>
+        {!userToken && (
+          <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-700">
+            User 토큰이 필요합니다.
+            <Link className="underline" to="/auth">
+              Auth
+            </Link>
+            에서 발급하세요.
+          </div>
+        )}
 
         <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
           <section className="space-y-4">
             <div className="rounded-2xl border border-slate-200 bg-white/70 p-5 shadow-sm">
               <div className="grid gap-4">
-                <label className="text-xs uppercase tracking-[0.2em] text-slate-500">User Token</label>
-                <input
-                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm shadow-sm focus:border-slate-400 focus:outline-none"
-                  value={userToken}
-                  onChange={(e) => setUserToken(e.target.value)}
-                />
-
-                <label className="text-xs uppercase tracking-[0.2em] text-slate-500">Device Token</label>
-                <input
-                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm shadow-sm focus:border-slate-400 focus:outline-none"
-                  value={deviceToken}
-                  onChange={(e) => setDeviceToken(e.target.value)}
-                />
-
                 <div className="flex flex-wrap items-center gap-3">
                   <div className="flex-1">
-                    <label className="text-xs uppercase tracking-[0.2em] text-slate-500"></label>
+                    <label className="text-xs uppercase tracking-[0.2em] text-slate-500">Map ID</label>
                     <input
                       className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm shadow-sm focus:border-slate-400 focus:outline-none"
                       value={mapId}
                       onChange={(e) => setMapId(e.target.value)}
                     />
                   </div>
-                  <button className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800" onClick={loadMap}>
+                  <button className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800" onClick={loadMap} disabled={!userToken}>
                     Load Map
                   </button>
                 </div>
