@@ -57,8 +57,8 @@ export default function DeviceAdminPage() {
 
       <div className="mb-6 rounded-xl border bg-white/70 p-4">
         <div className="flex gap-2">
-          <input className="flex-1 rounded border px-3 py-2" placeholder="Device 이름" value={name} onChange={(e) => setName(e.target.value)} />
-          <input className="w-40 rounded border px-3 py-2" placeholder="Map ID (옵션)" value={mapId} onChange={(e) => setMapId(e.target.value)} />
+          <input className="flex-1 rounded border px-3 py-2 text-slate-600" placeholder="Device 이름" value={name} onChange={(e) => setName(e.target.value)} />
+          <input className="w-40 rounded border px-3 py-2 text-slate-600" placeholder="Map ID (옵션)" value={mapId} onChange={(e) => setMapId(e.target.value)} />
           <button className="rounded bg-slate-900 px-4 py-2 text-white" onClick={handleCreate}>
             생성
           </button>
@@ -68,7 +68,7 @@ export default function DeviceAdminPage() {
 
       <div className="space-y-2">
         {items.map((d) => (
-          <div key={d.id} className="flex items-center justify-between rounded border bg-white/70 px-4 py-2">
+          <div key={d.id} className="flex items-center justify-between rounded border bg-white/70 px-4 py-2 text-slate-600">
             <div>
               {d.id} / {d.name} / {d.is_active ? "active" : "revoked"}
             </div>
