@@ -5,7 +5,7 @@ import asyncio
 
 from app.core.config import settings
 
-from app.api.routes import auth, telemetry, ws, maps, snapshots
+from app.api.routes import auth, telemetry, ws, maps, snapshots, devices
 from app.services.retention_service import retention_loop
 
 
@@ -35,6 +35,7 @@ app.include_router(telemetry.router)
 app.include_router(ws.router)
 app.include_router(maps.router)
 app.include_router(snapshots.router)
+app.include_router(devices.router)
 
 
 @app.get("/")

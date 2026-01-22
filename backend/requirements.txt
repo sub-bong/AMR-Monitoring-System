@@ -10,3 +10,10 @@ passlib[bcrypt]
 python-multipart
 aiofiles
 greenlet
+numpy
+opencv-python
+scipy
+shapely
+alphashape
+torch
+torchvision
