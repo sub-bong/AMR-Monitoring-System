@@ -1,9 +1,20 @@
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link, useLocation, Navigate } from "react-router-dom";
 import DashboardPage from "./pages/DashboardPage";
 import MapCapturePage from "./pages/MapCapturePage";
 import AuthPage from "./pages/AuthPage";
+import { useAuth } from "./hooks/auth/useAuth";
+import DeviceAdminPage from "./pages/DeviceAdminPage";
+
+function RequireAuth({ children }: { children: React.ReactNode }) {
+  const { userToken } = useAuth();
+  const location = useLocation();
+  if (!userToken) return <Navigate to="/auth" state={{ from: location }} replace />;
+  return children;
+}
 
 export default function App() {
+  const { userToken } = useAuth();
+
   return (
     <BrowserRouter>
       <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-slate-100">
@@ -16,6 +27,12 @@ export default function App() {
             <Link to="/capture" className="text-slate-700 hover:text-slate-900">
               Capture
             </Link>
+            <Link to="/devices" className="text-slate-700 hover:text-slate-900">
+              Devices
+            </Link>
+            <Link to="/remote" className="text-slate-700 hover:text-slate-900">
+              Remote
+            </Link>
             <Link to="/auth" className="text-slate-700 hover:text-slate-900">
               Auth
             </Link>
@@ -23,9 +40,39 @@ export default function App() {
         </nav>
 
         <Routes>
-          <Route path="/" element={<DashboardPage />} />
-          <Route path="/capture" element={<MapCapturePage />} />
-          <Route path="/auth" element={<AuthPage />} />
+          <Route path="/auth" element={userToken ? <Navigate to="/" replace /> : <AuthPage />} />
+          <Route
+            path="/"
+            element={
+              <RequireAuth>
+                <DashboardPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/capture"
+            element={
+              <RequireAuth>
+                <MapCapturePage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/devices"
+            element={
+              <RequireAuth>
+                <DeviceAdminPage />
+              </RequireAuth>
+            }
+          />
+          {/* <Route
+            path="/remote"
+            element={
+              <RequireAuth>
+                <RemoteViewerPage />
+              </RequireAuth>
+            }
+          /> */}
           <Route path="*" element={<div className="p-8">Not Found</div>} />
         </Routes>
       </div>

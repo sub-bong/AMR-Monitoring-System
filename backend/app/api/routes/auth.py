@@ -76,7 +76,7 @@ async def device_auth(payload: DeviceAuthIn, db: AsyncSession = Depends(get_db))
     device = result.scalar_one_or_none()
 
     # 디바이스(amr) 로그인: 디바이스 키 존재하지 않으면 인증 실패
-    if not device or not verify_device_key(payload.device_key, device.device_key_hash):
+    if not device or not device.is_active or not verify_device_key(payload.device_key, device.device_key_hash):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="invalid_device_key")
 
