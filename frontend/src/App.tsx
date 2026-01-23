@@ -4,6 +4,7 @@ import MapCapturePage from "./pages/MapCapturePage";
 import AuthPage from "./pages/AuthPage";
 import { useAuth } from "./hooks/auth/useAuth";
 import DeviceAdminPage from "./pages/DeviceAdminPage";
+import RemoteViewerPage from "./pages/RemoteViewerPage";
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
   const { userToken } = useAuth();
@@ -65,14 +66,14 @@ export default function App() {
               </RequireAuth>
             }
           />
-          {/* <Route
+          <Route
             path="/remote"
             element={
               <RequireAuth>
                 <RemoteViewerPage />
               </RequireAuth>
             }
-          /> */}
+          />
           <Route path="*" element={<div className="p-8">Not Found</div>} />
         </Routes>
       </div>
