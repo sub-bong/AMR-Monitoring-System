@@ -1,10 +1,12 @@
-import { BrowserRouter, Routes, Route, Link, useLocation, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link, useLocation, Navigate, useNavigate } from "react-router-dom";
 import DashboardPage from "./pages/DashboardPage";
 import MapCapturePage from "./pages/MapCapturePage";
 import AuthPage from "./pages/AuthPage";
 import { useAuth } from "./hooks/auth/useAuth";
 import DeviceAdminPage from "./pages/DeviceAdminPage";
 import RemoteViewerPage from "./pages/RemoteViewerPage";
+import { useEffect } from "react";
+import { setUnauthorizedHandler } from "./services/api";
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
   const { userToken } = useAuth();
@@ -13,11 +15,27 @@ function RequireAuth({ children }: { children: React.ReactNode }) {
   return children;
 }
 
+function AuthWatcher() {
+  const { clearTokens } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setUnauthorizedHandler(() => {
+      clearTokens();
+      navigate("/auth", { replace: true });
+    });
+    return () => setUnauthorizedHandler(null);
+  }, [clearTokens, navigate]);
+
+  return null;
+}
+
 export default function App() {
   const { userToken } = useAuth();
 
   return (
     <BrowserRouter>
+      <AuthWatcher />
       <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-slate-100">
         <nav className="fixed right-0 left-0 mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <div className="text-slate-900 text-sm font-semibold">AMR</div>
