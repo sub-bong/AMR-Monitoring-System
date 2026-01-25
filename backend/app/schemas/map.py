@@ -1,5 +1,5 @@
 from typing import Any, List, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class Point2D(BaseModel):
@@ -20,7 +20,7 @@ class MapCreate(BaseModel):
     '''
     map_id: str
     name: str
-    polygon: List[Point2D]
+    polygon: List[Point2D] = Field(default_factory=list)
     meta: Optional[dict[str, Any]] = None
 
 
