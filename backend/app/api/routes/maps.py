@@ -75,3 +75,25 @@ async def get_map(
         raise HTTPException(status_code=403, detail="map_access_denied")
 
     return {"ok": True, "map": {"map_id": m.map_id, "name": m.name, "polygon": m.polygon, "meta": m.meta}}
+
+
+@router.get("")
+async def list_maps(
+    user=Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    rows = await db.execute(select(Map))
+    items = rows.scalars().all()
+
+    allowed = await db.execute(
+        select(MapAccess.map_id).where(
+            MapAccess.subject_type == "user",
+            MapAccess.subject_id == user.id
+        )
+    )
+    allowed_ids = {row[0] for row in allowed.all()}
+
+    return {
+        "ok": True,
+        "items": [{"map_id": m.map_id, "name": m.name} for m in items if m.id in allowed_ids],
+    }
