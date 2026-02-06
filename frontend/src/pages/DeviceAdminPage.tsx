@@ -1,22 +1,35 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../hooks/auth/useAuth";
 import { createDevice, listDevices, revokeDevice } from "../services/deviceApi";
-import { apiGet } from "../services/api";
+import { apiGet, apiPost } from "../services/api";
 
 type Device = { id: number; name: string; is_active: boolean };
+type MapItem = { map_id: string; name: string };
 
 export default function DeviceAdminPage() {
   const { userToken } = useAuth();
-  const [items, setItems] = useState<Device[]>([]);
-  const [name, setName] = useState("");
-  const [mapId, setMapId] = useState("");
+  const [devices, setDevices] = useState<Device[]>([]);
+  const [maps, setMaps] = useState<MapItem[]>([]);
+
+  const [deviceName, setDeviceName] = useState("");
+  const [selectedMapId, setSelectedMapId] = useState("");
+
+  const [newMapId, setNewMapId] = useState("");
+  const [newMapName, setNewMapName] = useState("");
+
   const [issuedKey, setIssuedKey] = useState("");
   const [error, setError] = useState("");
 
-  async function load() {
+  async function loadDevices() {
     if (!userToken) return;
     const res = await listDevices(userToken);
-    setItems(res.items);
+    setDevices(res.items);
+  }
+
+  async function loadMaps() {
+    if (!userToken) return;
+    const res = await apiGet<{ ok: boolean; items: MapItem[] }>("/maps", userToken);
+    setMaps(res.items);
   }
 
   useEffect(() => {
